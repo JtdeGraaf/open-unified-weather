@@ -16,19 +16,20 @@
 
 package com.openunifiedweather.domain.sources.openmeteo.json
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 
 
-@Suppress("ktlint")
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class OpenMeteoWeatherHourly(
-    val time: LongArray,
+    @JsonProperty("time") val time: LongArray,
     @JsonProperty("temperature_2m") val temperature: Array<Double?>?,
     @JsonProperty("apparent_temperature") val apparentTemperature: Array<Double?>?,
     @JsonProperty("precipitation_probability") val precipitationProbability: Array<Int?>?,
-    val precipitation: Array<Double?>?,
-    val rain: Array<Double?>?,
-    val showers: Array<Double?>?,
-    val snowfall: Array<Double?>?,
+    @JsonProperty("precipitation") val precipitation: Array<Double?>?,
+    @JsonProperty("rain") val rain: Array<Double?>?,
+    @JsonProperty("showers") val showers: Array<Double?>?,
+    @JsonProperty("snowfall") val snowfall: Array<Double?>?,
     @JsonProperty("weathercode") val weatherCode: Array<Int?>?,
     @JsonProperty("windspeed_10m") val windSpeed: Array<Double?>?,
     @JsonProperty("winddirection_10m") val windDirection: Array<Int?>?,
@@ -39,5 +40,5 @@ data class OpenMeteoWeatherHourly(
     @JsonProperty("dewpoint_2m") val dewPoint: Array<Double?>?,
     @JsonProperty("pressure_msl") val pressureMsl: Array<Double?>?,
     @JsonProperty("cloudcover") val cloudCover: Array<Int?>?,
-    val visibility: Array<Double?>?,
+    @JsonProperty("visibility") val visibility: Array<Double?>?,
 )

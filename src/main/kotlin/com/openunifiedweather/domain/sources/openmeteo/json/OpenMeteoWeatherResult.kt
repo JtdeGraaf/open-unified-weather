@@ -16,17 +16,20 @@
 
 package com.openunifiedweather.domain.sources.openmeteo.json
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 
 
 /**
  * Open-Meteo weather
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class OpenMeteoWeatherResult(
     @JsonProperty("current") val current: OpenMeteoWeatherCurrent? = null,
-    val daily: OpenMeteoWeatherDaily? = null,
-    val hourly: OpenMeteoWeatherHourly? = null,
+    @JsonProperty("daily") val daily: OpenMeteoWeatherDaily? = null,
+    @JsonProperty("hourly") val hourly: OpenMeteoWeatherHourly? = null,
     @JsonProperty("minutely_15") val minutelyFifteen: OpenMeteoWeatherMinutely? = null,
-    val error: Boolean? = null,
-    val reason: String? = null,
+    @JsonProperty("error") val error: Boolean? = null,
+    @JsonProperty("reason") val reason: String? = null,
 )
+

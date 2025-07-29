@@ -16,21 +16,23 @@
 
 package com.openunifiedweather.domain.sources.openmeteo.json
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 
 /**
  * Open Meteo geocoding
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class OpenMeteoLocationResult(
-    val id: Int,
-    val name: String,
-    val latitude: Double,
-    val longitude: Double,
-    val timezone: String?,
+    @JsonProperty("id") val id: Int,
+    @JsonProperty("name") val name: String,
+    @JsonProperty("latitude") val latitude: Double,
+    @JsonProperty("longitude") val longitude: Double,
+    @JsonProperty("timezone") val timezone: String?,
     @JsonProperty("country_code") val countryCode: String?,
-    val country: String?,
-    val admin1: String?,
-    val admin2: String?,
-    val admin3: String?,
-    val admin4: String?,
+    @JsonProperty("country") val country: String?,
+    @JsonProperty("admin1") val admin1: String?,
+    @JsonProperty("admin2") val admin2: String?,
+    @JsonProperty("admin3") val admin3: String?,
+    @JsonProperty("admin4") val admin4: String?,
 )

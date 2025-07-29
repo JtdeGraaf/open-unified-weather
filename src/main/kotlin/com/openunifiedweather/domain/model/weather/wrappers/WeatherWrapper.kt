@@ -16,6 +16,7 @@
 
 package com.openunifiedweather.domain.model.weather.wrappers
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.openunifiedweather.domain.model.source.SourceFeature
 import com.openunifiedweather.domain.model.weather.model.Alert
 import com.openunifiedweather.domain.model.weather.model.Minutely
@@ -34,5 +35,5 @@ data class WeatherWrapper(
     val minutelyForecast: List<Minutely>? = null,
     val alertList: List<Alert>? = null,
     val normals: Normals? = null,
-    val failedFeatures: Map<SourceFeature, Throwable>? = null,
+    @JsonIgnore val failedFeatures: Map<SourceFeature, Throwable>? = null,
 )

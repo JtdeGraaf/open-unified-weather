@@ -32,6 +32,8 @@ import com.openunifiedweather.domain.sources.openmeteo.json.OpenMeteoWeatherResu
 import org.breezyweather.common.exceptions.InvalidLocationException
 import retrofit2.HttpException
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
+import retrofit2.converter.jackson.JacksonConverterFactory
 
 class OpenMeteoService (
     val client: Retrofit.Builder,
@@ -48,6 +50,8 @@ class OpenMeteoService (
         get() {
             return client
                 .baseUrl(OPEN_METEO_FORECAST_BASE_URL)
+                .addConverterFactory(JacksonConverterFactory.create())
+                .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
                 .build()
                 .create(OpenMeteoForecastApi::class.java)
         }
@@ -55,6 +59,8 @@ class OpenMeteoService (
         get() {
             return client
                 .baseUrl(OPEN_METEO_GEOCODING_BASE_URL)
+                .addConverterFactory(JacksonConverterFactory.create())
+                .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
                 .build()
                 .create(OpenMeteoGeocodingApi::class.java)
         }
@@ -62,6 +68,8 @@ class OpenMeteoService (
         get() {
             return client
                 .baseUrl(OPEN_METEO_AIR_QUALITY_BASE_URL)
+                .addConverterFactory(JacksonConverterFactory.create())
+                .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
                 .build()
                 .create(OpenMeteoAirQualityApi::class.java)
         }

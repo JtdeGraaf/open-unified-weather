@@ -16,13 +16,15 @@
 
 package com.openunifiedweather.domain.sources.openmeteo.json
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 
 
 /**
  * Open Meteo geocoding
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class OpenMeteoLocationResults(
-    val results: List<OpenMeteoLocationResult>?,
+    @JsonProperty("results") val results: List<OpenMeteoLocationResult>?,
     @JsonProperty("generationtime_ms") val generationtimeMs: Double?,
 )

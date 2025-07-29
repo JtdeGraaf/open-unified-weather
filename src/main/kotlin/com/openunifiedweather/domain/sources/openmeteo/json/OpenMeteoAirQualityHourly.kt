@@ -16,17 +16,18 @@
 
 package com.openunifiedweather.domain.sources.openmeteo.json
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class OpenMeteoAirQualityHourly(
-    val time: LongArray,
-    val pm10: Array<Double?>?,
+    @JsonProperty("time") val time: List<Long>,
+    @JsonProperty("pm10") val pm10: Array<Double?>?,
     @JsonProperty("pm2_5") val pm25: Array<Double?>?,
     @JsonProperty("carbon_monoxide") val carbonMonoxide: Array<Double?>?,
     @JsonProperty("nitrogen_dioxide") val nitrogenDioxide: Array<Double?>?,
     @JsonProperty("sulphur_dioxide") val sulphurDioxide: Array<Double?>?,
-    val ozone: Array<Double?>?,
+    @JsonProperty("ozone") val ozone: Array<Double?>?,
     @JsonProperty("alder_pollen") val alderPollen: Array<Double?>?,
     @JsonProperty("birch_pollen") val birchPollen: Array<Double?>?,
     @JsonProperty("grass_pollen") val grassPollen: Array<Double?>?,

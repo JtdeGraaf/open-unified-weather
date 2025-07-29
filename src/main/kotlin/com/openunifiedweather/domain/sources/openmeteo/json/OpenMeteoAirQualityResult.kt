@@ -16,10 +16,14 @@
 
 package com.openunifiedweather.domain.sources.openmeteo.json
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.annotation.JsonProperty
+
 
 /**
  * Open-Meteo air quality
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class OpenMeteoAirQualityResult(
-    val hourly: OpenMeteoAirQualityHourly? = null,
+    @JsonProperty("hourly") val hourly: OpenMeteoAirQualityHourly? = null,
 )

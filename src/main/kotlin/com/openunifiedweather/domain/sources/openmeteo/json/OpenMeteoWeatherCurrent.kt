@@ -16,9 +16,10 @@
 
 package com.openunifiedweather.domain.sources.openmeteo.json
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class OpenMeteoWeatherCurrent(
     @JsonProperty("temperature_2m") val temperature: Double?,
     @JsonProperty("apparent_temperature") val apparentTemperature: Double?,
@@ -31,6 +32,6 @@ data class OpenMeteoWeatherCurrent(
     @JsonProperty("dewpoint_2m") val dewPoint: Double?,
     @JsonProperty("pressure_msl") val pressureMsl: Double?,
     @JsonProperty("cloudcover") val cloudCover: Int?,
-    val visibility: Double?,
-    val time: Long,
+    @JsonProperty("visibility") val visibility: Double?,
+    @JsonProperty("time") val time: Long,
 )

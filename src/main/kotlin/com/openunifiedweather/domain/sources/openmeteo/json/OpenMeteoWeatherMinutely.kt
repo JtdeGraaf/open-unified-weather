@@ -16,8 +16,11 @@
 
 package com.openunifiedweather.domain.sources.openmeteo.json
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.annotation.JsonProperty
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class OpenMeteoWeatherMinutely(
-    val time: LongArray,
-    // @SerialName("precipitation_probability") val precipitationProbability: Array<Int?>?,
-    val precipitation: Array<Double?>?,
+    @JsonProperty("time") val time: List<Long>,
+    @JsonProperty("precipitation") val precipitation: List<Double?>? = null
 )

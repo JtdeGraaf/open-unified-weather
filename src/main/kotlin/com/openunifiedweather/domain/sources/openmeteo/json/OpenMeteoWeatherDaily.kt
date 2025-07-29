@@ -16,11 +16,12 @@
 
 package com.openunifiedweather.domain.sources.openmeteo.json
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class OpenMeteoWeatherDaily(
-    val time: LongArray,
+    @JsonProperty("time") val time: List<Long>,
     @JsonProperty("temperature_2m_max") val temperatureMax: Array<Double?>?,
     @JsonProperty("temperature_2m_min") val temperatureMin: Array<Double?>?,
     @JsonProperty("apparent_temperature_max") val apparentTemperatureMax: Array<Double?>?,

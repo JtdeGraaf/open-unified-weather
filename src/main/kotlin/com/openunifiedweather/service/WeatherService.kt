@@ -7,8 +7,8 @@ import com.openunifiedweather.domain.model.weather.wrappers.WeatherWrapper
 import com.openunifiedweather.domain.sources.openmeteo.OpenMeteoService
 import org.springframework.stereotype.Service
 import retrofit2.Retrofit
-import java.time.LocalDateTime
-import java.time.ZoneOffset
+import java.time.LocalDate
+import java.time.ZoneId
 import java.util.*
 import kotlin.time.Duration.Companion.hours
 
@@ -44,14 +44,18 @@ class WeatherService {
             ).blockingFirst()
 
         if (calculateMissingData) {
-            weatherResult = calculateMissingData(weatherResult)
+            weatherResult = calculateMissingData(weatherResult, latitude, longitude)
         }
 
         return weatherResult;
     }
 
 
-    private fun calculateMissingData(pureWeatherResult: WeatherWrapper): WeatherWrapper {
+    private fun calculateMissingData(
+        pureWeatherResult: WeatherWrapper,
+        latitude: Double,
+        longitude: Double
+    ): WeatherWrapper {
 
 
         // 1) Creates hours/days back to yesterday 00:00 if they are missing from the new refresh
@@ -68,8 +72,7 @@ class WeatherService {
             pureWeatherResult.hourlyForecast
         ) ?: emptyList()
 
-        // TODO What to do about this? Is Location even needed for calculating missing data?
-        val location = Location()
+        val location = Location(latitude = latitude, longitude = longitude)
 
         // 3) Create the daily object with air quality/pollen data + computes missing data
         val dailyForecast = completeDailyListFromHourlyList(
@@ -94,10 +97,12 @@ class WeatherService {
             it.date.time >= System.currentTimeMillis() - 1.hours.inWholeMilliseconds
         }
         val currentDay = dailyForecast.firstOrNull {
-            // Adding 23 hours just to be safe in case of DST
+            val zoneId = ZoneId.of(location.timeZone)
             val yesterdayMidnight = Date.from(
-                LocalDateTime.now().minusDays(1).withHour(0).withMinute(0).withSecond(0)
-                    .withNano(0).toInstant(ZoneOffset.UTC) // TODO: Use ZoneId from region
+                LocalDate.now(zoneId)
+                    .minusDays(1)
+                    .atStartOfDay(zoneId)
+                    .toInstant()
             )
             it.date.time >= yesterdayMidnight.time + 23.hours.inWholeMilliseconds
         }
@@ -117,17 +122,6 @@ class WeatherService {
             alertList = pureWeatherResult.alertList ?: emptyList()
         )
 
-        return WeatherWrapper(
-            dailyForecast = pureWeatherResult.dailyForecast,
-            hourlyForecast = computeMissingHourlyData(pureWeatherResult.hourlyForecast)
-                ?: pureWeatherResult.hourlyForecast,
-            current = null,
-            airQuality = null,
-            pollen = null,
-            minutelyForecast = null,
-            alertList = null,
-            normals = null,
-            failedFeatures = null
-        )
+        return weather.toWeatherWrapper()
     }
 }

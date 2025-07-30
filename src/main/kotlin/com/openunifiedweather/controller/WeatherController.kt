@@ -1,24 +1,42 @@
 package com.openunifiedweather.controller
 
-import com.openunifiedweather.domain.model.location.model.Location
-import com.openunifiedweather.domain.model.source.SourceFeature
 import com.openunifiedweather.domain.model.weather.wrappers.WeatherWrapper
-import com.openunifiedweather.domain.sources.openmeteo.OpenMeteoService
+import com.openunifiedweather.service.WeatherService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
-import retrofit2.Retrofit
 
 @RequestMapping("/api/v1/weather")
 @RestController
-class WeatherController {
+class WeatherController(
+    val weatherService: WeatherService
+) {
 
     @GetMapping()
-    fun getWeather(): ResponseEntity<WeatherWrapper> {
-        // TODO: not do this like this of course
-        val weatherResult = OpenMeteoService(Retrofit.Builder()).requestWeather(Location(latitude = 52.23019878158841, longitude = 5.37109365845126 ), listOf(
-            SourceFeature.FORECAST) ).blockingFirst()
-        return ResponseEntity.ok(weatherResult);
+    fun getWeather(
+        @RequestParam(required = true) latitude: Double,
+        @RequestParam(required = true) longitude: Double,
+        @RequestParam(required = false) forecast: Boolean,
+        @RequestParam(required = false) current: Boolean,
+        @RequestParam(required = false) airQuality: Boolean,
+        @RequestParam(required = false) pollen: Boolean,
+        @RequestParam(required = false) minutely: Boolean,
+        @RequestParam(required = false) normals: Boolean,
+        @RequestParam(required = false) reverseGeocoding: Boolean,
+    ): ResponseEntity<WeatherWrapper> {
+        val result = weatherService.getWeatherForecast(
+            latitude = latitude,
+            longitude = longitude,
+            forecast = forecast,
+            current = current,
+            airQuality = airQuality,
+            pollen = pollen,
+            minutely = minutely,
+            normals = normals,
+            reverseGeocoding = reverseGeocoding,
+        )
+        return ResponseEntity.ok(result);
     }
 }

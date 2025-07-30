@@ -16,19 +16,14 @@
 
 package com.openunifiedweather.domain.model.weather.model
 
-import com.openunifiedweather.domain.model.weather.wrappers.AirQualityWrapper
-import com.openunifiedweather.domain.model.weather.wrappers.DailyWrapper
-import com.openunifiedweather.domain.model.weather.wrappers.HourlyWrapper
-import com.openunifiedweather.domain.model.weather.wrappers.PollenWrapper
-import com.openunifiedweather.domain.model.weather.wrappers.WeatherWrapper
+import com.openunifiedweather.domain.model.weather.wrappers.*
 import java.io.Serializable
-import java.util.Date
+import java.util.*
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
 
 data class Weather(
-    val base: Base = Base(),
     val current: Current? = null,
     val normals: Normals? = null,
     val dailyForecast: List<Daily> = emptyList(),
@@ -41,7 +36,7 @@ data class Weather(
     val nextHourlyForecast = hourlyForecast.filter {
         // Example: 15:01 -> starts at 15:00, 15:59 -> starts at 15:00
         it.date.time >= System.currentTimeMillis() - 1.hours.inWholeMilliseconds &&
-            it.date.time < System.currentTimeMillis() + 24.hours.inWholeMilliseconds
+                it.date.time < System.currentTimeMillis() + 24.hours.inWholeMilliseconds
     }
 
     // Only hourly in the future, starting from current hour until the end
@@ -66,19 +61,12 @@ data class Weather(
         emptyList()
     }
 
-    fun isValid(pollingIntervalHours: Double?): Boolean {
-        val updateTime = base.refreshTime?.time ?: 0
-        val currentTime = System.currentTimeMillis()
-        return pollingIntervalHours == null ||
-            (currentTime >= updateTime && currentTime - updateTime < pollingIntervalHours * 1.hours.inWholeMilliseconds)
-    }
-
     val currentAlertList: List<Alert> = alertList
         .filter {
             (it.startDate == null && it.endDate == null) ||
-                (it.startDate != null && it.endDate != null && Date() in it.startDate..it.endDate) ||
-                (it.startDate == null && it.endDate != null && Date() < it.endDate) ||
-                (it.startDate != null && it.endDate == null && Date() > it.startDate)
+                    (it.startDate != null && it.endDate != null && Date() in it.startDate..it.endDate) ||
+                    (it.startDate == null && it.endDate != null && Date() < it.endDate) ||
+                    (it.startDate != null && it.endDate == null && Date() > it.startDate)
         }
 
     val minutelyForecastBy5Minutes: List<Minutely>

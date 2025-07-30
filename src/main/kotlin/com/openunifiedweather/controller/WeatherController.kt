@@ -25,6 +25,7 @@ class WeatherController(
         @RequestParam(required = false) minutely: Boolean,
         @RequestParam(required = false) normals: Boolean,
         @RequestParam(required = false) reverseGeocoding: Boolean,
+        @RequestParam(required = false) calculateMissingData: Boolean,
     ): ResponseEntity<WeatherWrapper> {
         val result = weatherService.getWeatherForecast(
             latitude = latitude,
@@ -36,6 +37,7 @@ class WeatherController(
             minutely = minutely,
             normals = normals,
             reverseGeocoding = reverseGeocoding,
+            calculateMissingData = calculateMissingData,
         )
         return ResponseEntity.ok(result);
     }
